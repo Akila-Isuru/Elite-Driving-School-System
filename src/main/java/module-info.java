@@ -3,6 +3,7 @@ module org.example.elitedrivingschoolsystem {
     requires javafx.fxml;
 
 
-    opens org.example.elitedrivingschoolsystem to javafx.fxml;
-    exports org.example.elitedrivingschoolsystem;
+    opens lk.ijse.elitedrivingschoolsystem to javafx.fxml;
+    exports lk.ijse.elitedrivingschoolsystem;
+    exports lk.ijse.elitedrivingschoolsystem.Controller;
 }
