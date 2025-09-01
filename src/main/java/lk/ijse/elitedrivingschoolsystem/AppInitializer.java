@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lk.ijse.elitedrivingschoolsystem.config.FactoryConfiguration;
 
 public class AppInitializer extends Application {
     @Override
@@ -20,6 +21,15 @@ public class AppInitializer extends Application {
     }
 
     public static void main(String[] args) {
+        try {
+            FactoryConfiguration.getInstance().getSession();
+            System.out.println("Session Established");
+        }catch (Exception e){
+            System.out.println("Session Not Established");
+        }finally {
+            FactoryConfiguration.getInstance().getSession().close();
+            System.out.println("Session Closed");
+        }
 
         launch(args);
     }

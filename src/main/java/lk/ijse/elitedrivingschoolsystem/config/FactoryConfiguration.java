@@ -1,0 +1,38 @@
+package lk.ijse.elitedrivingschoolsystem.config;
+
+import lk.ijse.elitedrivingschoolsystem.entity.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import javax.naming.Referenceable;
+
+public class FactoryConfiguration {
+    private static FactoryConfiguration factoryConfiguration;
+    private SessionFactory sessionFactory;
+
+    private FactoryConfiguration() { // private constructor එකක් ලෙස තබන්න
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml"); // ෆයිල් එකේ නම මෙතනින් දෙන්න.
+
+        // entities sessionFactory එක හැදීමට පෙර add කරන්න
+        configuration.addAnnotatedClass(Student.class);
+        configuration.addAnnotatedClass(Course.class);
+        configuration.addAnnotatedClass(Instructor.class);
+        configuration.addAnnotatedClass(Lesson.class);
+        configuration.addAnnotatedClass(Payment.class);
+        configuration.addAnnotatedClass(User.class);
+
+        sessionFactory = configuration.buildSessionFactory();
+    }
+
+    public static FactoryConfiguration getInstance() {
+        if (factoryConfiguration == null) {
+            factoryConfiguration = new FactoryConfiguration();
+        }
+        return factoryConfiguration;
+    }
+
+    public Session getSession() {
+        return sessionFactory.openSession();
+    }
+}

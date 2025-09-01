@@ -1,9 +1,13 @@
 module org.example.elitedrivingschoolsystem {
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.hibernate.orm.core;
+    requires java.naming;
+    requires java.sql; // මේක අලුතින් එකතු කරන්න
 
 
     opens lk.ijse.elitedrivingschoolsystem to javafx.fxml;
     exports lk.ijse.elitedrivingschoolsystem;
     exports lk.ijse.elitedrivingschoolsystem.Controller;
+    exports lk.ijse.elitedrivingschoolsystem.entity;
 }
