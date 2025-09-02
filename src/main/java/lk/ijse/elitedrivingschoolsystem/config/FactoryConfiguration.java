@@ -10,9 +10,9 @@ public class FactoryConfiguration {
     private static FactoryConfiguration factoryConfiguration;
     private SessionFactory sessionFactory;
 
-    private FactoryConfiguration() { // private constructor එකක් ලෙස තබන්න
+    private FactoryConfiguration() {
         Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml"); // ෆයිල් එකේ නම මෙතනින් දෙන්න.
+        configuration.configure("hibernate.cfg.xml");
 
         // entities sessionFactory එක හැදීමට පෙර add කරන්න
         configuration.addAnnotatedClass(Student.class);

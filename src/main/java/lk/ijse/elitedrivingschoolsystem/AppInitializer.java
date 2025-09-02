@@ -28,7 +28,7 @@ public class AppInitializer extends Application {
             System.out.println("Session Not Established");
         }finally {
             FactoryConfiguration.getInstance().getSession().close();
-            System.out.println("Session Established finished");
+
             System.out.println("Session Closed");
 
         }
