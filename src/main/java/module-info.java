@@ -12,4 +12,5 @@ module org.example.elitedrivingschoolsystem {
     exports lk.ijse.elitedrivingschoolsystem;
     exports lk.ijse.elitedrivingschoolsystem.Controller;
     exports lk.ijse.elitedrivingschoolsystem.entity;
+    opens lk.ijse.elitedrivingschoolsystem.entity to org.hibernate.orm.core;
 }

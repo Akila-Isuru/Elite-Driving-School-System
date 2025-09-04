@@ -14,7 +14,6 @@ public class FactoryConfiguration {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
 
-        // entities sessionFactory එක හැදීමට පෙර add කරන්න
         configuration.addAnnotatedClass(Student.class);
         configuration.addAnnotatedClass(Course.class);
         configuration.addAnnotatedClass(Instructor.class);
