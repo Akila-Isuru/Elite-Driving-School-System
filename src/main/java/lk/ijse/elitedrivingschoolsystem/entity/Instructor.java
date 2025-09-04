@@ -16,6 +16,7 @@ import java.util.List;
 @Setter
 public class Instructor {
 
+
     @Id
     @Column(name = "instructor_id")
     private String instructorId;

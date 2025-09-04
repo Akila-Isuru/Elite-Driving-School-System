@@ -29,6 +29,7 @@ public class Course {
     @Column(name = "fee", nullable = false)
     private double fee;
 
+
     @ManyToMany(mappedBy = "courses")
     private List<Student> students;
 
