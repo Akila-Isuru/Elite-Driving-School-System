@@ -4,6 +4,7 @@ import lk.ijse.elitedrivingschoolsystem.dao.custom.StudentDAO;
 import lk.ijse.elitedrivingschoolsystem.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class StudentDAOImpl implements StudentDAO {
@@ -58,7 +59,11 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public List<Student> getStudentsInAllCourses(Session session) {
-        String hql = "SELECT s FROM Student s WHERE (SELECT COUNT(c) FROM Course c) = (SELECT COUNT(s.courses) FROM Student s2 JOIN s2.courses WHERE s2 = s)";
+
+        String hql = "SELECT s FROM Student s WHERE " +
+                "(SELECT COUNT(c) FROM Course c) = " +
+                "(SELECT COUNT(sc.courseId) FROM Student s2 JOIN s2.courses sc WHERE s2.studentId = s.studentId)";
+
         Query<Student> query = session.createQuery(hql, Student.class);
         return query.list();
     }

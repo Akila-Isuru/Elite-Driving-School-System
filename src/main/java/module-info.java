@@ -6,7 +6,8 @@ module org.example.elitedrivingschoolsystem {
     requires java.sql;
     requires jakarta.persistence;
     requires static lombok;
-    requires com.ctc.wstx; // මේක අලුතින් එකතු කරන්න
+    requires com.ctc.wstx;
+    requires jbcrypt; // මේක අලුතින් එකතු කරන්න
 
 
     opens lk.ijse.elitedrivingschoolsystem to javafx.fxml;
