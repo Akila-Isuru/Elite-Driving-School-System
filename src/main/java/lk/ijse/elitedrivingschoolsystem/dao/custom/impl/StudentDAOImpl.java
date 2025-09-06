@@ -59,11 +59,8 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public List<Student> getStudentsInAllCourses(Session session) {
-
-        String hql = "SELECT s FROM Student s WHERE " +
-                "(SELECT COUNT(c) FROM Course c) = " +
-                "(SELECT COUNT(sc.courseId) FROM Student s2 JOIN s2.courses sc WHERE s2.studentId = s.studentId)";
-
+        String hql = "SELECT s FROM Student s " +
+                "WHERE SIZE(s.courses) = (SELECT COUNT(c.courseId) FROM Course c)";
         Query<Student> query = session.createQuery(hql, Student.class);
         return query.list();
     }

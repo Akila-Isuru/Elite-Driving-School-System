@@ -1,4 +1,10 @@
 package lk.ijse.elitedrivingschoolsystem.bo;
 
-public interface BOTypes {
+public enum BOTypes {
+    STUDENT,
+    COURSE,
+    INSTRUCTOR,
+    LESSON,
+    PAYMENT,
+    USER
 }
