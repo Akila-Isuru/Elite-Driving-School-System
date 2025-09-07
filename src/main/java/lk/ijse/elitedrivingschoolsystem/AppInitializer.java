@@ -11,7 +11,7 @@ import lk.ijse.elitedrivingschoolsystem.config.FactoryConfiguration;
 public class AppInitializer extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent loadingScreen = FXMLLoader.load(getClass().getResource("/View/LoadingScreen.fxml"));
+        Parent loadingScreen = FXMLLoader.load(getClass().getResource("/View/StudentRegistrationForm.fxml"));
         Scene scene = new Scene(loadingScreen);
 
 

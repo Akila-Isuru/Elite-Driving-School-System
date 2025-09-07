@@ -7,7 +7,7 @@ module org.example.elitedrivingschoolsystem {
     requires jakarta.persistence;
     requires static lombok;
     requires com.ctc.wstx;
-    requires jbcrypt; // මේක අලුතින් එකතු කරන්න
+    requires jbcrypt;
 
 
     opens lk.ijse.elitedrivingschoolsystem to javafx.fxml;
@@ -15,4 +15,6 @@ module org.example.elitedrivingschoolsystem {
     exports lk.ijse.elitedrivingschoolsystem.Controller;
     exports lk.ijse.elitedrivingschoolsystem.entity;
     opens lk.ijse.elitedrivingschoolsystem.entity to org.hibernate.orm.core;
+    opens lk.ijse.elitedrivingschoolsystem.Controller to javafx.fxml;
+
 }

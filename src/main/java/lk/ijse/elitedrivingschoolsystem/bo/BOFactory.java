@@ -18,9 +18,6 @@ public class BOFactory {
         return (boFactory == null) ? boFactory = new BOFactory() : boFactory;
     }
 
-    public enum BOTypes {
-        STUDENT, COURSE, INSTRUCTOR, LESSON, PAYMENT, USER
-    }
 
     public SuperBO getBO(BOTypes types) {
         switch (types) {
