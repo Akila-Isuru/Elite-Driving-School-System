@@ -17,7 +17,6 @@ import java.util.List;
 @Setter
 public class Student {
 
-
     @Id
     @Column(name = "student_id")
     private String studentId;
@@ -34,7 +33,8 @@ public class Student {
     @Column(name = "reg_date", nullable = false)
     private LocalDate regDate;
 
-    @ManyToMany
+    // Changes added here
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "student_course_details",
             joinColumns = @JoinColumn(name = "student_id"),

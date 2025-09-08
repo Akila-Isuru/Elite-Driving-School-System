@@ -1,18 +1,35 @@
 package lk.ijse.elitedrivingschoolsystem.dao.custom.impl;
 
+import lk.ijse.elitedrivingschoolsystem.bo.util.EntityDTOConverter;
 import lk.ijse.elitedrivingschoolsystem.dao.custom.StudentDAO;
+import lk.ijse.elitedrivingschoolsystem.dto.StudentDTO;
+import lk.ijse.elitedrivingschoolsystem.entity.Course; // Import Course class
 import lk.ijse.elitedrivingschoolsystem.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StudentDAOImpl implements StudentDAO {
+
+    private final EntityDTOConverter converter = new EntityDTOConverter(); // Need this to convert entities to DTOs
 
     @Override
     public boolean save(Student entity, Session session) {
         try {
+            // Save student first
             session.persist(entity);
+
+            // Manually persist courses if cascade is not working as expected
+            if (entity.getCourses() != null) {
+                for (Course course : entity.getCourses()) {
+                    // Ensure course is managed by the session before persisting
+                    if (!session.contains(course)) {
+                        session.persist(course);
+                    }
+                }
+            }
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,6 +73,16 @@ public class StudentDAOImpl implements StudentDAO {
         Query<Student> query = session.createQuery("FROM Student", Student.class);
         return query.list();
     }
+
+    // Added method to return List<StudentDTO>
+    public List<StudentDTO> getAllStudentDTOs(Session session) {
+        Query<Student> query = session.createQuery("FROM Student", Student.class);
+        List<Student> students = query.list();
+        return students.stream()
+                .map(converter::getStudentDTO) // Using the converter
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<Student> getStudentsInAllCourses(Session session) {

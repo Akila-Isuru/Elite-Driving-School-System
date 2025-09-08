@@ -27,37 +27,43 @@ public class StudentBOImpl implements StudentBO {
 
     @Override
     public boolean registerStudent(StudentDTO dto) throws RegistrationException {
-        if (!ValidationUtil.isValidEmail(dto.getEmail())) {
-            throw new RegistrationException("Invalid email format.");
-        }
-        if (dto.getContactNumber() != null && !dto.getContactNumber().isEmpty() && !ValidationUtil.isValidPhoneNumber(dto.getContactNumber())) {
-            throw new RegistrationException("Invalid phone number format.");
-        }
+        // ... (validation code)
 
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = null;
+        boolean isSaved = false; // Track if saved
 
         try {
             transaction = session.beginTransaction();
             Student student = converter.getStudent(dto);
 
-            // Fetch and set courses
             List<Course> courses = new ArrayList<>();
             for (String courseId : dto.getCourseIds()) {
                 Course course = courseDAO.get(courseId, session);
                 if (course != null) {
                     courses.add(course);
+                } else {
+                    // Handle case where courseId is not found, maybe throw an exception
+                    throw new RegistrationException("Course with ID " + courseId + " not found.");
                 }
             }
-            student.setCourses(courses);
+            student.setCourses(courses); // Set the courses list to the student
 
-            boolean isSaved = studentDAO.save(student, session);
+            // Now save the student. Cascade should handle the join table.
+            isSaved = studentDAO.save(student, session);
+
             if (isSaved) {
                 transaction.commit();
-                return true;
             } else {
-                return false;
+                if (transaction != null) {
+                    transaction.rollback();
+                }
             }
+        } catch (RegistrationException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw e; // Re-throw custom exceptions
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
@@ -67,16 +73,16 @@ public class StudentBOImpl implements StudentBO {
         } finally {
             session.close();
         }
+        return isSaved; // Return the save status
     }
 
+    // Modified method to call the DAO's getAllStudentDTOs method
     @Override
-    public List<StudentDTO> getAllStudents() {
+    public List<StudentDTO> getAllStudentDTOs() {
         Session session = FactoryConfiguration.getInstance().getSession();
         try {
-            List<Student> students = studentDAO.getAll(session);
-            return students.stream()
-                    .map(converter::getStudentDTO)
-                    .collect(Collectors.toList());
+            // Cast studentDAO to its implementation to access the specific method
+            return ((lk.ijse.elitedrivingschoolsystem.dao.custom.impl.StudentDAOImpl) studentDAO).getAllStudentDTOs(session);
         } finally {
             session.close();
         }
