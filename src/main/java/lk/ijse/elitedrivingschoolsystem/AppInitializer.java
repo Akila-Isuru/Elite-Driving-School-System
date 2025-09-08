@@ -15,7 +15,7 @@ public class AppInitializer extends Application {
         Scene scene = new Scene(loadingScreen);
 
 
-        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

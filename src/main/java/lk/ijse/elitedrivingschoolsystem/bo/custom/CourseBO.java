@@ -10,4 +10,7 @@ public interface CourseBO extends SuperBO {
     boolean updateCourse(CourseDTO dto);
     boolean deleteCourse(String courseId);
     List<CourseDTO> getAllCourses();
+
+    // Add this new method
+    CourseDTO getCourseByName(String courseName) throws Exception;
 }

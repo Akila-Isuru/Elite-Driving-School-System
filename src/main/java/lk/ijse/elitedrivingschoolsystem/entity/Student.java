@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList; // Import ArrayList
 import java.util.List;
 
 @Entity
@@ -33,20 +34,19 @@ public class Student {
     @Column(name = "reg_date", nullable = false)
     private LocalDate regDate;
 
-    // Changes added here
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Added LAZY fetch
     @JoinTable(
             name = "student_course_details",
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )
-    private List<Course> courses;
+    private List<Course> courses = new ArrayList<>(); // Initialize to avoid NullPointerException
 
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Payment> payments;
+    private List<Payment> payments = new ArrayList<>(); // Initialize to avoid NullPointerException
 
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Lesson> lessons;
+    private List<Lesson> lessons = new ArrayList<>(); // Initialize to avoid NullPointerException
 }

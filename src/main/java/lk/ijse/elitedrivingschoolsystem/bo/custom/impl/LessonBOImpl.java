@@ -17,6 +17,7 @@ import lk.ijse.elitedrivingschoolsystem.entity.Lesson;
 import lk.ijse.elitedrivingschoolsystem.entity.Student;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -138,6 +139,22 @@ public class LessonBOImpl implements LessonBO {
         Session session = FactoryConfiguration.getInstance().getSession();
         try {
             List<Lesson> lessons = lessonDAO.getAll(session);
+            return lessons.stream()
+                    .map(converter::getLessonDTO)
+                    .collect(Collectors.toList());
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public List<LessonDto> getLessonsByInstructorId(String instructorId) {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            // Use a Hibernate query to fetch lessons for a specific instructor
+            Query<Lesson> query = session.createQuery("FROM Lesson WHERE instructor.instructorId = :instructorId", Lesson.class);
+            query.setParameter("instructorId", instructorId);
+            List<Lesson> lessons = query.list();
             return lessons.stream()
                     .map(converter::getLessonDTO)
                     .collect(Collectors.toList());

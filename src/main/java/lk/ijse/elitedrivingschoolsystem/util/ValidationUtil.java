@@ -20,4 +20,6 @@ public class ValidationUtil {
         }
         return Pattern.compile(PHONE_REGEX).matcher(phoneNumber).matches();
     }
+
+
 }

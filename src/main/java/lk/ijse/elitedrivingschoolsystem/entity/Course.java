@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,10 +30,12 @@ public class Course {
     @Column(name = "fee", nullable = false)
     private double fee;
 
-
-    @ManyToMany(mappedBy = "courses")
-    private List<Student> students;
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY) // Added LAZY fetch
+    private List<Student> students = new ArrayList<>(); // Initialize to avoid NullPointerException
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Lesson> lessons;
+
+    @ManyToMany(mappedBy = "courses", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY) // Added LAZY fetch
+    private List<Instructor> instructors = new ArrayList<>(); // Initialize to avoid NullPointerException
 }

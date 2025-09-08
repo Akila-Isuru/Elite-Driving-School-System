@@ -10,6 +10,7 @@ import lk.ijse.elitedrivingschoolsystem.dto.CourseDTO;
 import lk.ijse.elitedrivingschoolsystem.entity.Course;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,6 +98,23 @@ public class CourseBOImpl implements CourseBO {
             return courses.stream()
                     .map(converter::getCourseDTO)
                     .collect(Collectors.toList());
+        } finally {
+            session.close();
+        }
+    }
+
+    // Implement the new method here
+    @Override
+    public CourseDTO getCourseByName(String courseName) throws Exception {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        try {
+            Query<Course> query = session.createQuery("FROM Course WHERE courseName = :name", Course.class);
+            query.setParameter("name", courseName);
+            Course course = query.uniqueResult();
+            if (course != null) {
+                return converter.getCourseDTO(course);
+            }
+            return null;
         } finally {
             session.close();
         }

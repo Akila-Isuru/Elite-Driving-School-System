@@ -66,7 +66,14 @@ public class EntityDTOConverter {
         course.setCourseId(dto.getCourseId());
         course.setCourseName(dto.getCourseName());
         course.setDuration(dto.getDuration());
-        course.setFee(Double.parseDouble(dto.getFee()));
+        // Ensure fee is parsed correctly. Handle potential NumberFormatException.
+        try {
+            course.setFee(Double.parseDouble(dto.getFee()));
+        } catch (NumberFormatException e) {
+            // Handle error, e.g., set a default value or throw an exception
+            course.setFee(0.0); // Example: set to 0.0 if parsing fails
+            System.err.println("Error parsing fee for course ID " + dto.getCourseId() + ": " + dto.getFee());
+        }
         return course;
     }
 
@@ -85,6 +92,12 @@ public class EntityDTOConverter {
         instructor.setName(dto.getName());
         instructor.setContactNumber(dto.getContactNumber());
         instructor.setEmail(dto.getEmail());
+        // Map courses if available, to ensure bi-directional consistency on save/update
+        if (dto.getCourses() != null) {
+            instructor.setCourses(dto.getCourses().stream()
+                    .map(this::getCourse)
+                    .collect(Collectors.toList()));
+        }
         return instructor;
     }
 
@@ -94,6 +107,18 @@ public class EntityDTOConverter {
         dto.setName(entity.getName());
         dto.setContactNumber(entity.getContactNumber());
         dto.setEmail(entity.getEmail());
+        // Map courses from entity to DTO for display
+        if (entity.getCourses() != null) {
+            dto.setCourses(entity.getCourses().stream()
+                    .map(this::getCourseDTO)
+                    .collect(Collectors.toList()));
+        }
+        // Map lessons from entity to DTO for display
+        if (entity.getLessons() != null) {
+            dto.setLessons(entity.getLessons().stream()
+                    .map(this::getLessonDTO)
+                    .collect(Collectors.toList()));
+        }
         return dto;
     }
 
@@ -110,17 +135,30 @@ public class EntityDTOConverter {
         dto.setLessonId(entity.getLessonId());
         dto.setDate(entity.getDate());
         dto.setTime(entity.getTime());
-        dto.setStudentId(entity.getStudent().getStudentId());
-        dto.setInstructorId(entity.getInstructor().getInstructorId());
-        dto.setCourseId(entity.getCourse().getCourseId());
+        if (entity.getStudent() != null) {
+            dto.setStudentId(entity.getStudent().getStudentId());
+        }
+        if (entity.getInstructor() != null) {
+            dto.setInstructorId(entity.getInstructor().getInstructorId());
+        }
+        if (entity.getCourse() != null) {
+            dto.setCourseId(entity.getCourse().getCourseId());
+        }
         return dto;
     }
 
     public Payment getPayment(PaymentDTO dto) {
         Payment payment = new Payment();
         payment.setPaymentId(dto.getPaymentId());
-        payment.setAmount(Double.parseDouble(dto.getAmount()));
-        payment.setDate(LocalDate.now());
+        // Ensure amount is parsed correctly. Handle potential NumberFormatException.
+        try {
+            payment.setAmount(Double.parseDouble(dto.getAmount()));
+        } catch (NumberFormatException e) {
+            // Handle error, e.g., set a default value or throw an exception
+            payment.setAmount(0.0); // Example: set to 0.0 if parsing fails
+            System.err.println("Error parsing amount for payment ID " + dto.getPaymentId() + ": " + dto.getAmount());
+        }
+        payment.setDate(LocalDate.now()); // Assuming payment date is always current date if not provided
         return payment;
     }
 
@@ -129,7 +167,9 @@ public class EntityDTOConverter {
         dto.setPaymentId(entity.getPaymentId());
         dto.setAmount(String.valueOf(entity.getAmount()));
         dto.setDate(entity.getDate());
-        dto.setStudentId(entity.getStudent().getStudentId());
+        if (entity.getStudent() != null) {
+            dto.setStudentId(entity.getStudent().getStudentId());
+        }
         return dto;
     }
 }

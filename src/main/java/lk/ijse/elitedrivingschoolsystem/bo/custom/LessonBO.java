@@ -11,4 +11,7 @@ public interface LessonBO extends SuperBO {
     boolean updateLesson(LessonDto dto) throws LessonException;
     boolean deleteLesson(String lessonId);
     List<LessonDto> getAllLessons();
+
+    // New method to get lessons by instructor ID
+    List<LessonDto> getLessonsByInstructorId(String instructorId);
 }
